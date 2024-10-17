@@ -28,7 +28,7 @@ struct TopMenuView: View {
             }
             
             HStack(spacing: 16) {
-                Text(viewModel.fps)
+                Text(LocalizedStringKey(viewModel.fps))
                     .padding(viewModel.fps.isEmpty ? 0 : 8)
                     .foregroundColor(Color.white)
                     .background(Capsule().fill(Color.white.opacity(0.2)))

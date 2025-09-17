@@ -117,6 +117,14 @@ struct IngestView: View {
                         break
                     }
                 })
+                .overlay {
+                    switch model.readyState {
+                    case .open, .closed:
+                        EmptyView()
+                    case .connecting, .closing:
+                        ProgressView()
+                    }
+                }
             }
         }
         .onAppear {

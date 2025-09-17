@@ -9,10 +9,11 @@ struct AudioSource: Sendable, Hashable, Equatable, CustomStringConvertible {
     let isSupportedStereo: Bool
 
     var description: String {
-        if isSupportedStereo {
-            return "\(portName)(\(dataSourceName))(Stereo)"
-        }
-        return "\(portName)(\(dataSourceName))(Mono)"
+        return "\(portName)(\(dataSourceName))"
+//        if isSupportedStereo {
+//            return "\(portName)(\(dataSourceName))(Stereo)"
+//        }
+//        return "\(portName)(\(dataSourceName))(Mono)"
     }
 }
 

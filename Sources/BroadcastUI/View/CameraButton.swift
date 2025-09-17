@@ -52,3 +52,13 @@ struct CameraButton: View {
         .buttonStyle(style)
     }
 }
+
+#Preview {
+    VStack {
+        CameraButton(style: .recording(.constant(true)), action: { })
+        
+        CameraButton(style: .recording(.constant(false)), action: { })
+    }
+    .padding()
+    .background(.black)    
+}

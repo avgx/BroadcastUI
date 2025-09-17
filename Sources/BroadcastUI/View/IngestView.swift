@@ -42,6 +42,8 @@ struct IngestView: View {
             VStack {
                 MTHKSwiftUiView(previewSource: model)
             }
+            .background(.black)
+            .ignoresSafeArea()
             VStack(alignment: .trailing) {
                 HStack(spacing: 16) {
                     
@@ -81,55 +83,74 @@ struct IngestView: View {
                 .padding()
                 Spacer()
             }
+            
             VStack {
                 Spacer()
-                if !model.audioSources.isEmpty {
-                    Picker("AudioSource", selection: $model.audioSource) {
-                        ForEach(model.audioSources, id: \.description) { source in
-                            Text(source.description).tag(source)
+                
+                    if !model.audioSources.isEmpty {
+                        Picker("AudioSource", selection: $model.audioSource) {
+                            ForEach(model.audioSources, id: \.description) { source in
+                                Text(source.description)
+                                    .tag(source)
+                            }
                         }
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
+                        .background(Color.black.opacity(0.2))
+                        .cornerRadius(16)
+                        .padding(16)
                     }
-                    .background(Color.black.opacity(0.2))
-                    .cornerRadius(16)
-                    .padding(16)
-                }
-                Spacer()
-            }
-            VStack {
-                Spacer()
-                HStack {
                     Spacer()
-                    switch model.readyState {
-                    case .connecting:
-                        Spacer()
-                    case .open:
-                        Button(action: {
+                    let rec = Binding(
+                        get: { model.readyState == .open || model.readyState == .connecting },
+                        set: { _ in }
+                    )
+                    CameraButton(style: .recording(rec), action: {
+                        switch model.readyState {
+                        case .open:
                             model.stopIngest()
-                        }, label: {
-                            Image(systemName: "stop.circle")
-                                .foregroundColor(.white)
-                                .font(.system(size: 24))
-                        })
-                        .frame(width: 60, height: 60)
-                        .background(Color.blue)
-                        .cornerRadius(30.0)
-                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0))
-                    case .closing:
-                        Spacer()
-                    case .closed:
-                        Button(action: {
+                        case .closed:
                             model.startIngest(preference)
-                        }, label: {
-                            Image(systemName: "record.circle")
-                                .foregroundColor(.white)
-                                .font(.system(size: 24))
-                        })
-                        .frame(width: 60, height: 60)
-                        .background(Color.blue)
-                        .cornerRadius(30.0)
-                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0))
-                    }
-                }
+                        case .connecting:
+                            break
+                        case .closing:
+                            break
+                        }
+                    })
+                
+//                HStack {
+//                    Spacer()
+//                    switch model.readyState {
+//                    case .connecting:
+//                        Spacer()
+//                    case .open:
+//                        Button(action: {
+//                            model.stopIngest()
+//                        }, label: {
+//                            Image(systemName: "stop.circle")
+//                                .foregroundColor(.white)
+//                                .font(.system(size: 24))
+//                        })
+//                        .frame(width: 60, height: 60)
+//                        .background(Color.blue)
+//                        .cornerRadius(30.0)
+//                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0))
+//                    case .closing:
+//                        Spacer()
+//                    case .closed:
+//                        Button(action: {
+//                            model.startIngest(preference)
+//                        }, label: {
+//                            Image(systemName: "record.circle")
+//                                .foregroundColor(.white)
+//                                .font(.system(size: 24))
+//                        })
+//                        .frame(width: 60, height: 60)
+//                        .background(Color.blue)
+//                        .cornerRadius(30.0)
+//                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0))
+//                    }
+//                }
             }            
         }
         .onAppear {

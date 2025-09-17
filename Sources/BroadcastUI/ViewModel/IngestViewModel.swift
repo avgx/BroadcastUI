@@ -195,17 +195,17 @@ final class IngestViewModel: ObservableObject {
         }
     }
 
-    func setVisualEffet(_ videoEffect: VideoEffectItem) {
-        Task { @ScreenActor in
-            if let currentVideoEffect {
-                _ = await mixer.screen.unregisterVideoEffect(currentVideoEffect)
-            }
-            if let videoEffect = videoEffect.makeVideoEffect() {
-                currentVideoEffect = videoEffect
-                _ = await mixer.screen.registerVideoEffect(videoEffect)
-            }
-        }
-    }
+//    func setVisualEffet(_ videoEffect: VideoEffectItem) {
+//        Task { @ScreenActor in
+//            if let currentVideoEffect {
+//                _ = await mixer.screen.unregisterVideoEffect(currentVideoEffect)
+//            }
+//            if let videoEffect = videoEffect.makeVideoEffect() {
+//                currentVideoEffect = videoEffect
+//                _ = await mixer.screen.registerVideoEffect(videoEffect)
+//            }
+//        }
+//    }
 
     func toggleTorch() {
         Task {

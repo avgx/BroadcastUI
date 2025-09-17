@@ -6,7 +6,7 @@ enum FPS: String, CaseIterable, Identifiable {
     case fps15 = "15"
     case fps30 = "30"
     case fps60 = "60"
-
+    
     var frameRate: Float64 {
         switch self {
         case .fps15:
@@ -17,26 +17,26 @@ enum FPS: String, CaseIterable, Identifiable {
             return 60
         }
     }
-
+    
     var id: Self { self }
 }
 
-enum VideoEffectItem: String, CaseIterable, Identifiable, Sendable {
-    case none
-    case monochrome
-
-    var id: Self { self }
-
-    func makeVideoEffect() -> VideoEffect? {
-        return nil
-    }
-}
+//enum VideoEffectItem: String, CaseIterable, Identifiable, Sendable {
+//    case none
+//    case monochrome
+//    
+//    var id: Self { self }
+//    
+//    func makeVideoEffect() -> VideoEffect? {
+//        return nil
+//    }
+//}
 
 struct IngestView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @EnvironmentObject var preference: PreferenceViewModel
     @StateObject private var model = IngestViewModel()
-
+    
     var body: some View {
         ZStack {
             VStack {
@@ -53,21 +53,21 @@ struct IngestView: View {
                     }}, label: {
                         Image(systemName:
                                 "arrow.trianglehead.2.clockwise.rotate.90.camera")
-                            .resizable()
-                            .scaledToFit()
-                            .foregroundColor(.white)
-                            .frame(width: 30, height: 30)
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(.white)
+                        .frame(width: 30, height: 30)
                     })
                     Button(action: { Task {
                         model.toggleTorch()
                     }}, label: {
                         Image(systemName: model.isTorchEnabled ?
-                                "flashlight.on.circle.fill" :
+                              "flashlight.on.circle.fill" :
                                 "flashlight.off.circle.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .foregroundColor(.white)
-                            .frame(width: 30, height: 30)
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(.white)
+                        .frame(width: 30, height: 30)
                     })
                 }.padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 16.0))
                 Picker("FPS", selection: $model.currentFPS) {
@@ -87,71 +87,37 @@ struct IngestView: View {
             VStack {
                 Spacer()
                 
-                    if !model.audioSources.isEmpty {
-                        Picker("AudioSource", selection: $model.audioSource) {
-                            ForEach(model.audioSources, id: \.description) { source in
-                                Text(source.description)
-                                    .tag(source)
-                            }
+                if !model.audioSources.isEmpty {
+                    Picker("AudioSource", selection: $model.audioSource) {
+                        ForEach(model.audioSources, id: \.description) { source in
+                            Text(source.description)
+                                .tag(source)
                         }
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.5)
-                        .background(Color.black.opacity(0.2))
-                        .cornerRadius(16)
-                        .padding(16)
                     }
-                    Spacer()
-                    let rec = Binding(
-                        get: { model.readyState == .open || model.readyState == .connecting },
-                        set: { _ in }
-                    )
-                    CameraButton(style: .recording(rec), action: {
-                        switch model.readyState {
-                        case .open:
-                            model.stopIngest()
-                        case .closed:
-                            model.startIngest(preference)
-                        case .connecting:
-                            break
-                        case .closing:
-                            break
-                        }
-                    })
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+                    .background(Color.black.opacity(0.2))
+                    .cornerRadius(16)
+                    .padding(16)
+                }
                 
-//                HStack {
-//                    Spacer()
-//                    switch model.readyState {
-//                    case .connecting:
-//                        Spacer()
-//                    case .open:
-//                        Button(action: {
-//                            model.stopIngest()
-//                        }, label: {
-//                            Image(systemName: "stop.circle")
-//                                .foregroundColor(.white)
-//                                .font(.system(size: 24))
-//                        })
-//                        .frame(width: 60, height: 60)
-//                        .background(Color.blue)
-//                        .cornerRadius(30.0)
-//                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0))
-//                    case .closing:
-//                        Spacer()
-//                    case .closed:
-//                        Button(action: {
-//                            model.startIngest(preference)
-//                        }, label: {
-//                            Image(systemName: "record.circle")
-//                                .foregroundColor(.white)
-//                                .font(.system(size: 24))
-//                        })
-//                        .frame(width: 60, height: 60)
-//                        .background(Color.blue)
-//                        .cornerRadius(30.0)
-//                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0))
-//                    }
-//                }
-            }            
+                let rec = Binding(
+                    get: { model.readyState == .open || model.readyState == .connecting },
+                    set: { _ in }
+                )
+                CameraButton(style: .recording(rec), action: {
+                    switch model.readyState {
+                    case .open:
+                        model.stopIngest()
+                    case .closed:
+                        model.startIngest(preference)
+                    case .connecting:
+                        break
+                    case .closing:
+                        break
+                    }
+                })
+            }
         }
         .onAppear {
             model.startRunning(preference)

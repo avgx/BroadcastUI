@@ -64,8 +64,6 @@ public struct BroadcastUI: View {
             VStack {
                 if isPresented {
                     HStack(spacing: 16) {
-                        Spacer()
-                        
                         Button {
                             dismiss()
                         } label: {
@@ -76,6 +74,7 @@ public struct BroadcastUI: View {
                                 .background(Capsule().fill(Color.white.opacity(0.2)))
                                 .clipShape(Rectangle())
                         }
+                        Spacer()
                     }
                 }
                 Spacer()

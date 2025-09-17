@@ -7,7 +7,6 @@ import Logging
 final class IngestViewModel: ObservableObject {
     static let logger = Logger(label: "broadcast")
     @Published var currentFPS: FPS = .fps30
-    @Published var visualEffectItem: VideoEffectItem = .none
     @Published private(set) var error: Error?
     @Published var isShowError = false
     @Published private(set) var isTorchEnabled = false

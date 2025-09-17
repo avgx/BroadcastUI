@@ -23,6 +23,9 @@ struct Preference: Sendable {
 
 public struct BroadcastUI: View {
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.isPresented) private var isPresented
+    
     
     @State private var initDone = false
     @State private var preference = PreferenceViewModel()
@@ -42,18 +45,40 @@ public struct BroadcastUI: View {
     }
 
     public var body: some View {
-        if initDone {
-            IngestView()
-                .environmentObject(preference)
-        } else {
-            ProgressView()
-            .onAppear {
-                Task {
-                    await SessionBuilderFactory.shared.register(RTMPSessionFactory())
-                    await MainActor.run {
-                        initDone = true
+        ZStack {
+            if initDone {
+                IngestView()
+                    .environmentObject(preference)
+            } else {
+                ProgressView()
+                    .onAppear {
+                        Task {
+                            await SessionBuilderFactory.shared.register(RTMPSessionFactory())
+                            await MainActor.run {
+                                initDone = true
+                            }
+                        }
+                    }
+            }
+            
+            VStack {
+                if isPresented {
+                    HStack(spacing: 16) {
+                        Spacer()
+                        
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "xmark")
+                                .imageScale(.small)
+                                .foregroundColor(Color.white)
+                                .padding()
+                                .background(Capsule().fill(Color.white.opacity(0.2)))
+                                .clipShape(Rectangle())
+                        }
                     }
                 }
+                Spacer()
             }
         }
 //        ZStack {

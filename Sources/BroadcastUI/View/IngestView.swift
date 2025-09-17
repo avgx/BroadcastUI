@@ -44,16 +44,7 @@ struct IngestView: View {
             }
             VStack(alignment: .trailing) {
                 HStack(spacing: 16) {
-                    if !model.audioSources.isEmpty {
-                        Picker("AudioSource", selection: $model.audioSource) {
-                            ForEach(model.audioSources, id: \.description) { source in
-                                Text(source.description).tag(source)
-                            }
-                        }
-                        .background(Color.black.opacity(0.2))
-                        .cornerRadius(16)
-                        .padding(16)
-                    }
+                    
                     Spacer()
                     Button(action: { Task {
                         model.flipCamera()
@@ -92,17 +83,17 @@ struct IngestView: View {
             }
             VStack {
                 Spacer()
-                TabView(selection: $model.visualEffectItem) {
-                    ForEach(VideoEffectItem.allCases) {
-                        Text($0.rawValue).padding()
+                if !model.audioSources.isEmpty {
+                    Picker("AudioSource", selection: $model.audioSource) {
+                        ForEach(model.audioSources, id: \.description) { source in
+                            Text(source.description).tag(source)
+                        }
                     }
+                    .background(Color.black.opacity(0.2))
+                    .cornerRadius(16)
+                    .padding(16)
                 }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
-                .frame(height: 120)
-                .padding(.bottom, 32)
-                .onChange(of: model.visualEffectItem) { tag in
-                    model.setVisualEffet(tag)
-                }
+                Spacer()
             }
             VStack {
                 Spacer()
@@ -139,7 +130,7 @@ struct IngestView: View {
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0))
                     }
                 }
-            }
+            }            
         }
         .onAppear {
             model.startRunning(preference)

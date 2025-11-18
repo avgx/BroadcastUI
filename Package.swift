@@ -18,7 +18,7 @@ let package = Package(
             targets: ["BroadcastUI"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/shogo4405/HaishinKit.swift", from: "2.1.1"),
+        .package(url: "https://github.com/shogo4405/HaishinKit.swift", exact: "2.1.1"),
         .package(url: "https://github.com/apple/swift-log.git", from: "1.5.4")
     ],
     targets: [
